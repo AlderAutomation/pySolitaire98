@@ -1,10 +1,11 @@
 class Card:
     
-    def __init__(self, number, suit, face="down", rotation="portrait" ) -> None:
+    def __init__(self, number, suit, image, face="down", rotation="portrait" ) -> None:
         self.number = number
         self.suit = suit
         self.face = face
         self.rotation = rotation
+        self.image = image
 
         if suit == "hearts":
             self.colour = "red"
@@ -15,12 +16,13 @@ class Card:
         elif suit == "spades":
             self.colour = "black"
 
+
     def flip_card (self) -> None:
         if self.face == "up":
             self.face = "down"
         else:
             self.face = "up"
-            
+
 
     def rotate_card (self) -> None:
         if self.rotation == "portrait":
