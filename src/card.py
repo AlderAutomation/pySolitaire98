@@ -1,4 +1,4 @@
-class card:
+class Card:
     
     def __init__(self, number, suit, face="down", rotation="portrait" ) -> None:
         self.number = number
@@ -20,3 +20,10 @@ class card:
             self.face = "down"
         else:
             self.face = "up"
+            
+
+    def rotate_card (self) -> None:
+        if self.rotation == "portrait":
+            self.rotation = "landscape"
+        else:
+            self.rotation = "portrait"
