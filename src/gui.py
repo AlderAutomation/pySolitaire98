@@ -16,22 +16,15 @@ surface = pygame.display.set_mode((width, height))
 surface.fill(color)
 pygame.display.set_caption("pySolitaire98")
 
-icon_name = pygame.image.load("./assets/image/icon.png")
-pygame.display.set_icon(icon_name)
+icon = pygame.image.load("./assets/image/icon.png")
+pygame.display.set_icon(icon)
 
 
 image = pygame.image.load("./assets/image/spritesheet.png")
 sprite_sheet =  spritesheet.SpriteSheet(image)
 
-
-
 empty_slot = sprite_sheet.get_image(0, 4, 71, 96, 1.5)
 out_of_cards = sprite_sheet.get_image(1, 5, 71, 96, 1.5)
-
-# def deal_next_card(pos) -> None:
-#     if pos is 
-
-
 
 pygame.display.flip()
 
@@ -72,8 +65,6 @@ while running:
 
             print (pos)
             deal_cards()
-            # if test_deck.card_deck[51].rect.collidepoint(pos):
-            #     print ("Deal!")
 
 
 
