@@ -25,7 +25,10 @@ class Deck:
 
     
     def deal (self, index=0) -> object:
-        return self.card_deck.pop(index)
+        if len(self.card_deck) == 0:
+            return False
+        else:
+            return self.card_deck.pop(index)
 
     
     def display(self) -> None:

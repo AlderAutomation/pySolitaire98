@@ -26,7 +26,7 @@ sprite_sheet =  spritesheet.SpriteSheet(image)
 
 
 empty_slot = sprite_sheet.get_image(0, 4, 71, 96, 1.5)
-
+out_of_cards = sprite_sheet.get_image(1, 5, 71, 96, 1.5)
 
 # def deal_next_card(pos) -> None:
 #     if pos is 
@@ -41,11 +41,14 @@ dealer.shuffle()
 draw_cards = []
 
 def deal_cards() -> None:
-    draw_cards.append(dealer.deal())
-    draw_cards[-1].x = 150
-    draw_cards[-1].y = 20
-    surface.blit(draw_cards[-1].frontside, (draw_cards[-1].x, draw_cards[-1].y))
-    pygame.display.update()
+    try:
+        draw_cards.append(dealer.deal())
+        draw_cards[-1].x = 150
+        draw_cards[-1].y = 20
+        surface.blit(draw_cards[-1].frontside, (draw_cards[-1].x, draw_cards[-1].y))
+        pygame.display.update()
+    except:
+        print("Out of cards")
  
 
 
@@ -53,9 +56,12 @@ while running:
 
     surface.blit(empty_slot, (568, 20))
 
-    surface.blit(dealer.card_deck[-1].backside, (20, 20))
-    surface.blit(dealer.card_deck[-1].backside, (25, 20))
-    surface.blit(dealer.card_deck[-1].backside, (30, 20))
+    try:
+        surface.blit(dealer.card_deck[-1].backside, (20, 20))
+        surface.blit(dealer.card_deck[-1].backside, (25, 20))
+        surface.blit(dealer.card_deck[-1].backside, (30, 20))
+    except:
+        surface.blit(out_of_cards, (20, 20))
 
 
     for event in pygame.event.get():
