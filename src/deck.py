@@ -9,13 +9,15 @@ suits = ['clubs', 'diamonds', 'hearts', 'spades']
 
 class Deck:
     def __init__(self) -> None:
-        image = pygame.image.load("./assets/image/cardspritesheet.png").convert_alpha()
+        image = pygame.image.load("./assets/image/spritesheet.png").convert_alpha()
         sprite_sheet =  spritesheet.SpriteSheet(image)
+
+        backside = sprite_sheet.get_image(10, 4, 71, 96, 1.5)
 
         self.card_deck = []
         for suit in suits:
             for number in numbers: 
-                self.card_deck.append(card.Card(number, suit, sprite_sheet.get_image(numbers.index(number), suits.index(suit), 71, 96)))
+                self.card_deck.append(card.Card(number, suit, sprite_sheet.get_image(numbers.index(number), suits.index(suit), 71, 96, 1.5), backside))
 
 
     def shuffle(self) -> None:
