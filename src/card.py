@@ -1,12 +1,14 @@
 class Card:
     
-    def __init__(self, number, suit, frontside, backside="", face="down", rotation="portrait" ) -> None:
+    def __init__(self, number, suit:str, frontside:str, backside:str, face:str="down") -> None:
         self.number = number
         self.suit = suit
         self.face = face
-        self.rotation = rotation
+        self.rotation = "portrait"
         self.frontside = frontside
         self.backside = backside
+        self.x = 20
+        self.y = 20
 
         if suit == "hearts":
             self.colour = "red"
@@ -30,3 +32,13 @@ class Card:
             self.rotation = "landscape"
         else:
             self.rotation = "portrait"
+
+
+    def set_x(self, x:int) -> None:
+        print (f'Set X to {x}')
+        self.x = x
+
+
+    def set_x(self, y:int) -> None:
+        print (f'Set Y to {y}')
+        self.y = y

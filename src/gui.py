@@ -28,28 +28,47 @@ sprite_sheet =  spritesheet.SpriteSheet(image)
 empty_slot = sprite_sheet.get_image(0, 4, 71, 96, 1.5)
 
 
-
+# def deal_next_card(pos) -> None:
+#     if pos is 
 
 
 
 pygame.display.flip()
 
-test_deck = deck.Deck()
-test_deck.shuffle()
+dealer = deck.Deck()
+dealer.shuffle()
 
+draw_cards = []
+
+def deal_cards() -> None:
+    draw_cards.append(dealer.deal())
+    draw_cards[-1].x = 150
+    draw_cards[-1].y = 20
+    surface.blit(draw_cards[-1].frontside, (draw_cards[-1].x, draw_cards[-1].y))
+    pygame.display.update()
+ 
 
 
 while running: 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
 
     surface.blit(empty_slot, (568, 20))
 
-    surface.blit(test_deck.card_deck[51].backside, (20, 20))
-    surface.blit(test_deck.card_deck[51].backside, (25, 20))
-    surface.blit(test_deck.card_deck[51].backside, (30, 20))
-    surface.blit(test_deck.card_deck[0].frontside, (20, 175))
+    surface.blit(dealer.card_deck[-1].backside, (20, 20))
+    surface.blit(dealer.card_deck[-1].backside, (25, 20))
+    surface.blit(dealer.card_deck[-1].backside, (30, 20))
+
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos = pygame.mouse.get_pos()
+
+            print (pos)
+            deal_cards()
+            # if test_deck.card_deck[51].rect.collidepoint(pos):
+            #     print ("Deal!")
+
 
 
     pygame.display.update()
