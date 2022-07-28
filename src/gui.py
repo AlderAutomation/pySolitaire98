@@ -33,6 +33,17 @@ dealer.shuffle()
 
 draw_cards = []
 
+col0 = []
+col1 = []
+col2 = []
+col3 = []
+col4 = []
+col5 = []
+col6 = []
+
+cols = [col0, col1, col2, col3, col4, col5, col6]
+
+
 def deal_cards() -> None:
     try:
         draw_cards.append(dealer.deal())
@@ -44,30 +55,50 @@ def deal_cards() -> None:
         print("Out of cards")
  
 
+def new_game_deal():
 
-while running: 
+    while len(col6) < 7:
+        
+        for col in cols:
+            col.append(dealer.deal())
 
-    surface.blit(empty_slot, (568, 20))
+        flipme = cols.pop(0)
 
-    try:
-        surface.blit(dealer.card_deck[-1].backside, (20, 20))
-        surface.blit(dealer.card_deck[-1].backside, (25, 20))
-        surface.blit(dealer.card_deck[-1].backside, (30, 20))
-    except:
-        surface.blit(out_of_cards, (20, 20))
-
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        if event.type == pygame.MOUSEBUTTONUP:
-            pos = pygame.mouse.get_pos()
-
-            print (pos)
-            deal_cards()
+        flipme[-1].flip_card()
 
 
 
-    pygame.display.update()
 
-pygame.quit()
+
+def main():
+    # while running: 
+
+    #     surface.blit(empty_slot, (568, 20))
+
+    #     try:
+    #         surface.blit(dealer.card_deck[-1].backside, (20, 20))
+    #         surface.blit(dealer.card_deck[-1].backside, (25, 20))
+    #         surface.blit(dealer.card_deck[-1].backside, (30, 20))
+    #     except:
+    #         surface.blit(out_of_cards, (20, 20))
+
+
+    #     for event in pygame.event.get():
+    #         if event.type == pygame.QUIT:
+    #             running = False
+    #         if event.type == pygame.MOUSEBUTTONUP:
+    #             pos = pygame.mouse.get_pos()
+
+    #             print (pos)
+    #             deal_cards()
+
+
+
+    #     pygame.display.update()
+
+    # pygame.quit()
+    new_game_deal()
+
+
+if __name__=="__main__":
+    main()
