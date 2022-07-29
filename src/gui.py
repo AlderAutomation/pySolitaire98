@@ -1,3 +1,4 @@
+from logging import exception
 import pygame
 import settings
 import spritesheet
@@ -5,7 +6,6 @@ import card
 import deck
 
 pygame.init()
-running = True
 
 width = settings.width1
 height = settings.height1
@@ -51,6 +51,7 @@ def deal_cards() -> None:
         draw_cards[-1].y = 20
         surface.blit(draw_cards[-1].frontside, (draw_cards[-1].x, draw_cards[-1].y))
         pygame.display.update()
+        print(f"Remaining cards: {len(dealer.card_deck)}")
     except:
         print("Out of cards")
  
@@ -66,38 +67,63 @@ def new_game_deal():
 
         flipme[-1].flip_card()
 
+        x_y_for_col(20,200,col6)
+
+        deal_for_new_game(col6)
 
 
+    
+def x_y_for_col(x:int, y:int, col:object) -> None:
+    temp_x = x
+    temp_y = y
+
+    for card in col:
+        card.x = temp_x
+        card.y = temp_y
+    
+        # temp_x = temp_x + 20
+        temp_y = temp_y + 20
+
+
+def deal_for_new_game(col:object) -> None:
+    for card in col: 
+        if card.face == "down":
+            surface.blit(card.backside, (card.x, card.y))
+        else:
+            surface.blit(card.frontside, (card.x, card.y))
 
 
 def main():
-    # while running: 
+    running = True
 
-    #     surface.blit(empty_slot, (568, 20))
-
-    #     try:
-    #         surface.blit(dealer.card_deck[-1].backside, (20, 20))
-    #         surface.blit(dealer.card_deck[-1].backside, (25, 20))
-    #         surface.blit(dealer.card_deck[-1].backside, (30, 20))
-    #     except:
-    #         surface.blit(out_of_cards, (20, 20))
-
-
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             running = False
-    #         if event.type == pygame.MOUSEBUTTONUP:
-    #             pos = pygame.mouse.get_pos()
-
-    #             print (pos)
-    #             deal_cards()
-
-
-
-    #     pygame.display.update()
-
-    # pygame.quit()
     new_game_deal()
+
+    while running: 
+
+        surface.blit(empty_slot, (568, 20))
+
+        try:
+            surface.blit(dealer.card_deck[-1].backside, (20, 20))
+            surface.blit(dealer.card_deck[-1].backside, (25, 20))
+            surface.blit(dealer.card_deck[-1].backside, (30, 20))
+        except:
+            surface.blit(out_of_cards, (20, 20))
+
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+
+                print (pos)
+                deal_cards()
+
+
+
+        pygame.display.update()
+
+    pygame.quit()
 
 
 if __name__=="__main__":
