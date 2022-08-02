@@ -2,7 +2,6 @@ from logging import exception
 import pygame
 import settings
 import spritesheet
-import card
 import deck
 
 pygame.init()
@@ -67,8 +66,19 @@ def new_game_deal():
 
         flipme[-1].flip_card()
 
-        x_y_for_col(20,200,col6)
-
+        x_y_for_col(20,200,col0)
+        deal_for_new_game(col0)
+        x_y_for_col(166,200,col1)
+        deal_for_new_game(col1)
+        x_y_for_col(312,200,col2)
+        deal_for_new_game(col2)
+        x_y_for_col(458,200,col3)
+        deal_for_new_game(col3)
+        x_y_for_col(604,200,col4)
+        deal_for_new_game(col4)
+        x_y_for_col(750,200,col5)
+        deal_for_new_game(col5)
+        x_y_for_col(896,200,col6)
         deal_for_new_game(col6)
 
 
