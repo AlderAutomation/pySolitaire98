@@ -1,3 +1,5 @@
+import settings
+
 class Card:
     
     def __init__(self, number, suit:str, frontside:str, backside:str, face:str="down") -> None:
@@ -7,8 +9,11 @@ class Card:
         self.rotation = "portrait"
         self.frontside = frontside
         self.backside = backside
-        self.x = 20
-        self.y = 20
+        self.top_x = 20
+        self.top_y = 20
+        self.is_clicked = False
+        self.bottom_x = self.top_x + settings.card_width
+        self.bottom_y = self.top_y + settings.card_height
 
         if suit == "hearts":
             self.colour = "red"
@@ -32,13 +37,3 @@ class Card:
             self.rotation = "landscape"
         else:
             self.rotation = "portrait"
-
-
-    def set_x(self, x:int) -> None:
-        print (f'Set X to {x}')
-        self.x = x
-
-
-    def set_x(self, y:int) -> None:
-        print (f'Set Y to {y}')
-        self.y = y

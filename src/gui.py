@@ -6,30 +6,29 @@ import deck
 
 pygame.init()
 
+# Surface setup
 width = settings.width1
 height = settings.height1
 color = settings.original_green
 
-
 surface = pygame.display.set_mode((width, height))
 surface.fill(color)
 pygame.display.set_caption("pySolitaire98")
-
 icon = pygame.image.load("./assets/image/icon.png")
 pygame.display.set_icon(icon)
 
-
+# Spritesheet 
 image = pygame.image.load("./assets/image/spritesheet.png")
 sprite_sheet =  spritesheet.SpriteSheet(image)
 
-empty_slot = sprite_sheet.get_image(0, 4, 71, 96, 1.5)
-out_of_cards = sprite_sheet.get_image(1, 5, 71, 96, 1.5)
+empty_slot = sprite_sheet.get_image(0, 4, 71, 96, settings.scale)
+out_of_cards = sprite_sheet.get_image(1, 5, 71, 96, settings.scale)
 
 pygame.display.flip()
 
+# game init'ing
 dealer = deck.Deck()
 dealer.shuffle()
-
 draw_cards = []
 
 col0 = []
@@ -46,7 +45,7 @@ cols = [col0, col1, col2, col3, col4, col5, col6]
 def deal_cards() -> None:
     try:
         draw_cards.append(dealer.deal())
-        draw_cards[-1].x = 150
+        draw_cards[-1].x = 166
         draw_cards[-1].y = 20
         surface.blit(draw_cards[-1].frontside, (draw_cards[-1].x, draw_cards[-1].y))
         pygame.display.update()
@@ -84,14 +83,12 @@ def new_game_deal():
 
     
 def x_y_for_col(x:int, y:int, col:object) -> None:
-    temp_x = x
     temp_y = y
 
     for card in col:
-        card.x = temp_x
+        card.x = x
         card.y = temp_y
     
-        # temp_x = temp_x + 20
         temp_y = temp_y + 20
 
 
@@ -110,12 +107,12 @@ def main():
 
     while running: 
 
-        surface.blit(empty_slot, (568, 20))
+        surface.blit(empty_slot, (458, 20))
 
         try:
             surface.blit(dealer.card_deck[-1].backside, (20, 20))
-            surface.blit(dealer.card_deck[-1].backside, (25, 20))
             surface.blit(dealer.card_deck[-1].backside, (30, 20))
+            surface.blit(dealer.card_deck[-1].backside, (40, 20))
         except:
             surface.blit(out_of_cards, (20, 20))
 
@@ -126,9 +123,12 @@ def main():
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
 
-                print (pos)
-                deal_cards()
-
+                try:
+                    if pos[0] <= dealer.card_deck[0].bottom_x and pos[0] >= dealer.card_deck[0].top_x:
+                        if pos[1] <= dealer.card_deck[0].bottom_y and pos[1] >= dealer.card_deck[0].top_y:
+                            deal_cards()
+                except:
+                    deal_cards()
 
 
         pygame.display.update()

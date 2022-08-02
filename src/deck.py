@@ -13,7 +13,7 @@ class Deck:
         image = pygame.image.load("./assets/image/spritesheet.png").convert_alpha()
         sprite_sheet =  spritesheet.SpriteSheet(image)
 
-        backside = sprite_sheet.get_image(settings.beach, 4, 71, 96, 1.5)
+        backside = sprite_sheet.get_image(settings.beach, 4, 71, 96, settings.scale)
 
         self.card_deck = []
         for suit in suits:

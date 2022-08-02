@@ -1,7 +1,11 @@
+# General 
 width1, height1 = 1024, 768
 colwidth = 146
+scale = 1.5
+card_width = 71 * scale
+card_height = 96.25 * scale
 
-
+# Card Backings
 design = 1
 design2 = 2
 robot = 3
