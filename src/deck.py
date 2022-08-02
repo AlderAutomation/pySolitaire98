@@ -2,6 +2,7 @@ import random
 import card
 import spritesheet
 import pygame
+import settings
 
 
 numbers = ['A',2,3,4,5,6,7,8,9,10,'J','Q','K']
@@ -12,7 +13,7 @@ class Deck:
         image = pygame.image.load("./assets/image/spritesheet.png").convert_alpha()
         sprite_sheet =  spritesheet.SpriteSheet(image)
 
-        backside = sprite_sheet.get_image(10, 4, 71, 96, 1.5)
+        backside = sprite_sheet.get_image(settings.beach, 4, 71, 96, 1.5)
 
         self.card_deck = []
         for suit in suits:
