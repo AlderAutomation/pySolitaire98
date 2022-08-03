@@ -18,7 +18,7 @@ icon = pygame.image.load("./assets/image/icon.png")
 pygame.display.set_icon(icon)
 
 # Spritesheet 
-image = pygame.image.load("./assets/image/spritesheet.png")
+image = pygame.image.load("./assets/image/spritesheet.png").convert_alpha()
 sprite_sheet =  spritesheet.SpriteSheet(image)
 
 empty_slot = sprite_sheet.get_image(0, 4, 71, 96, settings.scale)
@@ -29,7 +29,7 @@ pygame.display.flip()
 # game init'ing
 dealer = deck.Deck()
 dealer.shuffle()
-draw_cards = []
+waste_pile = []
 
 col0 = []
 col1 = []
@@ -44,17 +44,37 @@ cols = [col0, col1, col2, col3, col4, col5, col6]
 
 def deal_cards() -> None:
     try:
-        draw_cards.append(dealer.deal())
-        draw_cards[-1].x = 166
-        draw_cards[-1].y = 20
-        surface.blit(draw_cards[-1].frontside, (draw_cards[-1].x, draw_cards[-1].y))
+        waste_pile.append(dealer.deal())
+        waste_pile[-1].top_x = 166
+        waste_pile[-1].top_y = 20
+        surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
         pygame.display.update()
         print(f"Remaining cards: {len(dealer.card_deck)}")
     except:
-        print("Out of cards")
- 
+        surface.fill(color)
+        draw_colums()
+        surface.blit(out_of_cards, (20, 20))
+        try:
+            surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
+        except:
+            rebuild_stock_pile()
+            draw_stock_pile()
+
+
+def draw_stock_pile() -> None:
+    surface.blit(dealer.card_deck[-1].backside, (20, 20))
+    surface.blit(dealer.card_deck[-1].backside, (30, 20))
+    surface.blit(dealer.card_deck[-1].backside, (40, 20))
+
+
+def rebuild_stock_pile() -> None:
+    for card in waste_pile:
+        dealer.rebuild_from_discard(card)
+        waste_pile.pop()
+
 
 def new_game_deal():
+    draw_stock_pile()
 
     while len(col6) < 7:
         
@@ -65,6 +85,10 @@ def new_game_deal():
 
         flipme[-1].flip_card()
 
+        draw_colums()
+
+
+def draw_colums() -> None:
         x_y_for_col(20,200,col0)
         deal_for_new_game(col0)
         x_y_for_col(166,200,col1)
@@ -80,14 +104,13 @@ def new_game_deal():
         x_y_for_col(896,200,col6)
         deal_for_new_game(col6)
 
-
     
 def x_y_for_col(x:int, y:int, col:object) -> None:
     temp_y = y
 
     for card in col:
-        card.x = x
-        card.y = temp_y
+        card.top_x = x
+        card.top_y = temp_y
     
         temp_y = temp_y + 20
 
@@ -95,9 +118,9 @@ def x_y_for_col(x:int, y:int, col:object) -> None:
 def deal_for_new_game(col:object) -> None:
     for card in col: 
         if card.face == "down":
-            surface.blit(card.backside, (card.x, card.y))
+            surface.blit(card.backside, (card.top_x, card.top_y))
         else:
-            surface.blit(card.frontside, (card.x, card.y))
+            surface.blit(card.frontside, (card.top_x, card.top_y))
 
 
 def main():
@@ -107,16 +130,6 @@ def main():
 
     while running: 
 
-        surface.blit(empty_slot, (458, 20))
-
-        try:
-            surface.blit(dealer.card_deck[-1].backside, (20, 20))
-            surface.blit(dealer.card_deck[-1].backside, (30, 20))
-            surface.blit(dealer.card_deck[-1].backside, (40, 20))
-        except:
-            surface.blit(out_of_cards, (20, 20))
-
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -124,8 +137,8 @@ def main():
                 pos = pygame.mouse.get_pos()
 
                 try:
-                    if pos[0] <= dealer.card_deck[0].bottom_x and pos[0] >= dealer.card_deck[0].top_x:
-                        if pos[1] <= dealer.card_deck[0].bottom_y and pos[1] >= dealer.card_deck[0].top_y:
+                    if pos[0] >= 20 and pos[0] <= 20 + settings.card_width:
+                        if pos[1] >= 20 and pos[1] <= 20 + settings.card_height:
                             deal_cards()
                 except:
                     deal_cards()
