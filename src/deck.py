@@ -42,4 +42,5 @@ class Deck:
 
 
     def rebuild_from_discard(self, card:object) -> None:
+        card.face = "down"
         self.card_deck.append(card)

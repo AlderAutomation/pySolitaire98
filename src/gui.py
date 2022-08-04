@@ -47,6 +47,7 @@ def deal_cards() -> None:
         waste_pile.append(dealer.deal())
         waste_pile[-1].top_x = 166
         waste_pile[-1].top_y = 20
+        waste_pile[-1].face = "up"
         surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
         pygame.display.update()
         print(f"Remaining cards: {len(dealer.card_deck)}")
@@ -86,6 +87,7 @@ def new_game_deal():
         flipme[-1].flip_card()
 
         draw_colums()
+
 
 
 def draw_colums() -> None:
@@ -128,13 +130,36 @@ def main():
 
     new_game_deal()
 
+    cols = []
+    cols = [col0, col1, col2, col3, col4, col5, col6]
+
+
     while running: 
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+
+                for card in waste_pile:
+                    card.set_is_clicked(pos)
+
+                for col in cols:
+                    for card in col:
+                        card.set_is_clicked(pos)
+
+
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
+
+                for card in waste_pile:
+                    card.set_is_clicked(pos)
+
+                for col in cols:
+                    for card in col:
+                        card.set_is_clicked(pos)
 
                 try:
                     if pos[0] >= 20 and pos[0] <= 20 + settings.card_width:
