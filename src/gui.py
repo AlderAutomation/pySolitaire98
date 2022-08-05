@@ -48,10 +48,14 @@ def deal_cards() -> None:
         waste_pile[-1].top_x = 166
         waste_pile[-1].top_y = 20
         waste_pile[-1].face = "up"
+        waste_pile[-1].is_covered = False
+        if len(waste_pile) > 1:
+            waste_pile[-2].is_covered = True
         surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
         pygame.display.update()
         print(f"Remaining cards: {len(dealer.card_deck)}")
-    except:
+    except Exception as e:
+        print(e)
         surface.fill(color)
         draw_colums()
         surface.blit(out_of_cards, (20, 20))
@@ -85,6 +89,7 @@ def new_game_deal():
         flipme = cols.pop(0)
 
         flipme[-1].flip_card()
+        flipme[-1].is_covered = False
 
         draw_colums()
 
