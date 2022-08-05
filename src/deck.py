@@ -43,4 +43,5 @@ class Deck:
 
     def rebuild_from_discard(self, card:object) -> None:
         card.face = "down"
+        card.is_covered = True
         self.card_deck.append(card)

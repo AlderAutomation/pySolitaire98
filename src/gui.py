@@ -43,6 +43,11 @@ cols = [col0, col1, col2, col3, col4, col5, col6]
 
 
 def deal_cards() -> None:
+    # TODO too many issues with this function and probably too many things trying to happen here. 
+    # Seems that when the dealer runs out it throws error then tries to rebuild deck then throws another 
+    # error resulting in only half the deck rebuilding. 
+        # Exception 1 from deal cards: 'bool' object has no attribute 'top_x'
+        # Exception 2 from deal cards: 'bool' object has no attribute 'frontside'
     try:
         waste_pile.append(dealer.deal())
         waste_pile[-1].top_x = 166
@@ -55,13 +60,14 @@ def deal_cards() -> None:
         pygame.display.update()
         print(f"Remaining cards: {len(dealer.card_deck)}")
     except Exception as e:
-        print(e)
+        print(f"Exception 1 from deal cards: {e}")
         surface.fill(color)
         draw_colums()
         surface.blit(out_of_cards, (20, 20))
         try:
             surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
-        except:
+        except Exception as e:
+            print(f"Exception 2 from deal cards: {e}")
             rebuild_stock_pile()
             draw_stock_pile()
 
@@ -73,7 +79,10 @@ def draw_stock_pile() -> None:
 
 
 def rebuild_stock_pile() -> None:
+    print("restocking")
+
     for card in waste_pile:
+        print(type(card))
         dealer.rebuild_from_discard(card)
         waste_pile.pop()
 
