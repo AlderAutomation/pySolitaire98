@@ -1,4 +1,5 @@
 from logging import exception
+# from re import T
 import pygame
 import settings
 import spritesheet
@@ -18,7 +19,7 @@ icon = pygame.image.load("./assets/image/icon.png")
 pygame.display.set_icon(icon)
 
 # Spritesheet 
-image = pygame.image.load("./assets/image/spritesheet.png").convert_alpha()
+image = pygame.image.load("./assets/image/spritesheet.png")
 sprite_sheet =  spritesheet.SpriteSheet(image)
 
 empty_slot = sprite_sheet.get_image(0, 4, 71, 96, settings.scale)
@@ -41,14 +42,9 @@ col6 = []
 
 cols = [col0, col1, col2, col3, col4, col5, col6]
 
-
 def deal_cards() -> None:
-    # TODO too many issues with this function and probably too many things trying to happen here. 
-    # Seems that when the dealer runs out it throws error then tries to rebuild deck then throws another 
-    # error resulting in only half the deck rebuilding. 
-        # Exception 1 from deal cards: 'bool' object has no attribute 'top_x'
-        # Exception 2 from deal cards: 'bool' object has no attribute 'frontside'
-    try:
+
+    if len(dealer.card_deck) > 0:
         waste_pile.append(dealer.deal())
         waste_pile[-1].top_x = 166
         waste_pile[-1].top_y = 20
@@ -59,17 +55,18 @@ def deal_cards() -> None:
         surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
         pygame.display.update()
         print(f"Remaining cards: {len(dealer.card_deck)}")
-    except Exception as e:
-        print(f"Exception 1 from deal cards: {e}")
+    elif len(dealer.card_deck) == 0 and dealer.is_out_of_cards == False:
+        dealer.is_out_of_cards = True
+        
         surface.fill(color)
+        surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
         draw_colums()
         surface.blit(out_of_cards, (20, 20))
-        try:
-            surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
-        except Exception as e:
-            print(f"Exception 2 from deal cards: {e}")
+    elif len(dealer.card_deck) == 0 and dealer.is_out_of_cards == True:
+        if len(dealer.card_deck) == 0:
             rebuild_stock_pile()
             draw_stock_pile()
+            dealer.is_out_of_cards = False
 
 
 def draw_stock_pile() -> None:
@@ -82,7 +79,6 @@ def rebuild_stock_pile() -> None:
     print("restocking")
 
     for card in waste_pile:
-        print(type(card))
         dealer.rebuild_from_discard(card)
         waste_pile.pop()
 
@@ -141,7 +137,7 @@ def deal_for_new_game(col:object) -> None:
 
 def main():
     running = True
-
+    
     new_game_deal()
 
     cols = []

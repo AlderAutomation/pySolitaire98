@@ -10,6 +10,7 @@ suits = ['clubs', 'diamonds', 'hearts', 'spades']
 
 class Deck:
     def __init__(self) -> None:
+        self.is_out_of_cards = False
         image = pygame.image.load("./assets/image/spritesheet.png").convert_alpha()
         sprite_sheet =  spritesheet.SpriteSheet(image)
 
