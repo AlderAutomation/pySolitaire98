@@ -1,9 +1,12 @@
-from logging import exception
-# from re import T
+import logging
 import pygame
 import settings
 import spritesheet
 import deck
+
+LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
+logging.basicConfig(filename="log.log", level=logging.DEBUG, format = LOG_FORMAT)
+my_logger = logging.getLogger()
 
 pygame.init()
 
@@ -43,6 +46,7 @@ col6 = []
 cols = [col0, col1, col2, col3, col4, col5, col6]
 
 def deal_cards() -> None:
+    # TODO still trying to find where the other 13 cards are going on the redeal 
 
     if len(dealer.card_deck) > 0:
         waste_pile.append(dealer.deal())
@@ -55,18 +59,17 @@ def deal_cards() -> None:
         surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
         pygame.display.update()
         print(f"Remaining cards: {len(dealer.card_deck)}")
-    elif len(dealer.card_deck) == 0 and dealer.is_out_of_cards == False:
-        dealer.is_out_of_cards = True
-        
-        surface.fill(color)
-        surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
-        draw_colums()
-        surface.blit(out_of_cards, (20, 20))
+        if len(dealer.card_deck) == 0 and dealer.is_out_of_cards == False:
+            dealer.is_out_of_cards = True
+            
+            surface.fill(color)
+            surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
+            draw_colums()
+            surface.blit(out_of_cards, (20, 20))
     elif len(dealer.card_deck) == 0 and dealer.is_out_of_cards == True:
         if len(dealer.card_deck) == 0:
             rebuild_stock_pile()
             draw_stock_pile()
-            dealer.is_out_of_cards = False
 
 
 def draw_stock_pile() -> None:
@@ -76,11 +79,16 @@ def draw_stock_pile() -> None:
 
 
 def rebuild_stock_pile() -> None:
-    print("restocking")
+    my_logger.debug("Rebuilding Stock Pile")
 
-    for card in waste_pile:
-        dealer.rebuild_from_discard(card)
-        waste_pile.pop()
+    if len(waste_pile) > 0:
+        for card in waste_pile:
+            my_logger.debug(len(waste_pile))
+            dealer.rebuild_from_discard(card)
+            waste_pile.pop()
+    else:
+        dealer.is_out_of_cards = False
+
 
 
 def new_game_deal():
