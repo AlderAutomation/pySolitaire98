@@ -67,9 +67,8 @@ def deal_cards() -> None:
             draw_colums()
             surface.blit(out_of_cards, (20, 20))
     elif len(dealer.card_deck) == 0 and dealer.is_out_of_cards == True:
-        if len(dealer.card_deck) == 0:
-            rebuild_stock_pile()
-            draw_stock_pile()
+        rebuild_stock_pile()
+        draw_stock_pile()
 
 
 def draw_stock_pile() -> None:
@@ -81,14 +80,12 @@ def draw_stock_pile() -> None:
 def rebuild_stock_pile() -> None:
     my_logger.debug("Rebuilding Stock Pile")
 
-    if len(waste_pile) > 0:
+    while len(waste_pile) > 0:
         for card in waste_pile:
-            my_logger.debug(len(waste_pile))
             dealer.rebuild_from_discard(card)
             waste_pile.pop()
-    else:
-        dealer.is_out_of_cards = False
-
+    
+    dealer.is_out_of_cards = False
 
 
 def new_game_deal():
