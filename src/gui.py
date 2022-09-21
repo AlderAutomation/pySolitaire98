@@ -46,8 +46,6 @@ col6 = []
 cols = [col0, col1, col2, col3, col4, col5, col6]
 
 def deal_cards() -> None:
-    # TODO still trying to find where the other 13 cards are going on the redeal 
-
     if len(dealer.card_deck) > 0:
         waste_pile.append(dealer.deal())
         waste_pile[-1].top_x = 166
@@ -68,7 +66,9 @@ def deal_cards() -> None:
             surface.blit(out_of_cards, (20, 20))
     elif len(dealer.card_deck) == 0 and dealer.is_out_of_cards == True:
         rebuild_stock_pile()
+        surface.fill(color)
         draw_stock_pile()
+        draw_colums()
 
 
 def draw_stock_pile() -> None:
@@ -81,9 +81,8 @@ def rebuild_stock_pile() -> None:
     my_logger.debug("Rebuilding Stock Pile")
 
     while len(waste_pile) > 0:
-        for card in waste_pile:
-            dealer.rebuild_from_discard(card)
-            waste_pile.pop()
+        dealer.rebuild_from_discard(waste_pile[0])
+        waste_pile.pop(0)
     
     dealer.is_out_of_cards = False
 
