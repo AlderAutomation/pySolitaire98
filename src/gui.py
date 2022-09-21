@@ -77,6 +77,13 @@ def draw_stock_pile() -> None:
     surface.blit(dealer.card_deck[-1].backside, (40, 20))
 
 
+def draw_empty_foundations() -> None:
+    surface.blit(empty_slot, (458, 20))
+    surface.blit(empty_slot, (604, 20))
+    surface.blit(empty_slot, (750, 20))
+    surface.blit(empty_slot, (896, 20))
+
+
 def rebuild_stock_pile() -> None:
     my_logger.debug("Rebuilding Stock Pile")
 
@@ -89,6 +96,7 @@ def rebuild_stock_pile() -> None:
 
 def new_game_deal():
     draw_stock_pile()
+    draw_empty_foundations()
 
     while len(col6) < 7:
         
