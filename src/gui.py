@@ -37,6 +37,11 @@ waste_pile = []
 clock = pygame.time.Clock()
 FPS = 60
 
+foundation_1 = []
+foundation_2 = []
+foundation_3 = []
+foundation_4 = []
+
 col0 = []
 col1 = []
 col2 = []
@@ -86,10 +91,22 @@ def draw_stock_pile() -> None:
 
 
 def draw_foundations() -> None:
-    surface.blit(empty_slot, (458, 20))
-    surface.blit(empty_slot, (604, 20))
-    surface.blit(empty_slot, (750, 20))
-    surface.blit(empty_slot, (896, 20))
+    if len(foundation_1) == 0:
+        surface.blit(empty_slot, (458, 20))
+    else:
+        surface.blit(foundation_1[1], (458, 20))
+    if len(foundation_2) == 0:
+        surface.blit(empty_slot, (604, 20))
+    else:
+        surface.blit(foundation_2[1], (604, 20))
+    if len(foundation_3) == 0:
+        surface.blit(empty_slot, (750, 20))
+    else:
+        surface.blit(foundation_3[1], (750, 20))
+    if len(foundation_4) == 0:
+        surface.blit(empty_slot, (896, 20))
+    else:
+        surface.blit(foundation_4[1], (896, 20))
 
 
 def rebuild_stock_pile() -> None:
