@@ -34,6 +34,8 @@ pygame.display.flip()
 dealer = deck.Deck()
 dealer.shuffle()
 waste_pile = []
+clock = pygame.time.Clock()
+FPS = 60
 
 col0 = []
 col1 = []
@@ -147,6 +149,18 @@ def deal_for_new_game(col:object) -> None:
             surface.blit(card.frontside, (card.top_x, card.top_y))
 
 
+def move_card(mouse_pos:tuple, card:object)->None: 
+    print (f"Mouse: {mouse_pos}\n Card: {card.number} {card.suit}")
+    card.top_x = mouse_pos[0]
+    card.top_y = mouse_pos [1]
+
+    surface.blit(card.frontside, (card.top_x, card.top_y))
+
+    # remove it from waste pile 
+    # add it to another pile
+    # redraw card while moving card and after new pile placement 
+
+
 def main():
     running = True
     
@@ -165,23 +179,16 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
 
-                for card in waste_pile:
-                    card.set_is_clicked(pos)
-
-                for col in cols:
-                    for card in col:
-                        card.set_is_clicked(pos)
+                if len(waste_pile) > 0: 
+                    waste_pile[-1].set_is_clicked(pos, True)
 
 
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
 
                 for card in waste_pile:
-                    card.set_is_clicked(pos)
-
-                for col in cols:
-                    for card in col:
-                        card.set_is_clicked(pos)
+                    if card.is_clicked:
+                        card.set_is_clicked(pos, False)
 
                 try:
                     if pos[0] >= 20 and pos[0] <= 20 + settings.card_width:
@@ -190,8 +197,15 @@ def main():
                 except:
                     deal_cards()
 
+            if event.type == pygame.MOUSEMOTION and len(waste_pile) > 0:
+                if waste_pile[-1].is_clicked:
+                    pos = pygame.mouse.get_pos()
+                    move_card(pos, waste_pile[-1])
+    
+    
+        clock.tick(FPS)
 
-        pygame.display.update()
+        pygame.display.flip()
 
     pygame.quit()
 

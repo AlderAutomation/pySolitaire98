@@ -40,13 +40,10 @@ class Card:
             self.rotation = "portrait"
 
 
-    def set_is_clicked (self, pos:tuple) -> None:
+    def set_is_clicked (self, pos:tuple, clicked:bool) -> None:
         if pos[0] >= self.top_x and pos[0] <= self.top_x + settings.card_width:
             if pos[1] >= self.top_y and pos[1] <= self.top_y + settings.card_height:
                 if self.face == "up" and self.is_covered == False:
                     print(f"{self.number}, {self.suit} has been clicked")
-                    if self.is_clicked == False:
-                        self.is_clicked = True
-                    else:
-                        self.is_clicked = False
+                    self.is_clicked = clicked
                     print(f"is_clicked set to : {self.is_clicked}")
