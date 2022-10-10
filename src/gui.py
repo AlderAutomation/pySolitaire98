@@ -65,12 +65,18 @@ def deal_cards() -> None:
             surface.fill(color)
             surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
             draw_colums()
+            draw_foundations()
             surface.blit(out_of_cards, (20, 20))
     elif len(dealer.card_deck) == 0 and dealer.is_out_of_cards == True:
         rebuild_stock_pile()
-        surface.fill(color)
-        draw_stock_pile()
-        draw_colums()
+        redraw_all()
+
+
+def redraw_all():
+    surface.fill(color)
+    draw_foundations()
+    draw_stock_pile()
+    draw_colums()
 
 
 def draw_stock_pile() -> None:
@@ -79,7 +85,7 @@ def draw_stock_pile() -> None:
     surface.blit(dealer.card_deck[-1].backside, (40, 20))
 
 
-def draw_empty_foundations() -> None:
+def draw_foundations() -> None:
     surface.blit(empty_slot, (458, 20))
     surface.blit(empty_slot, (604, 20))
     surface.blit(empty_slot, (750, 20))
@@ -98,7 +104,7 @@ def rebuild_stock_pile() -> None:
 
 def new_game_deal():
     draw_stock_pile()
-    draw_empty_foundations()
+    draw_foundations()
 
     while len(col6) < 7:
         
@@ -200,6 +206,7 @@ def main():
             if event.type == pygame.MOUSEMOTION and len(waste_pile) > 0:
                 if waste_pile[-1].is_clicked:
                     pos = pygame.mouse.get_pos()
+                    redraw_all()
                     move_card(pos, waste_pile[-1])
     
     
