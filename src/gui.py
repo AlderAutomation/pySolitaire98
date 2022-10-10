@@ -94,19 +94,19 @@ def draw_foundations() -> None:
     if len(foundation_1) == 0:
         surface.blit(empty_slot, (458, 20))
     else:
-        surface.blit(foundation_1[1], (458, 20))
+        surface.blit(foundation_1[-1].frontside, (458, 20))
     if len(foundation_2) == 0:
         surface.blit(empty_slot, (604, 20))
     else:
-        surface.blit(foundation_2[1], (604, 20))
+        surface.blit(foundation_2[-1].frontside, (604, 20))
     if len(foundation_3) == 0:
         surface.blit(empty_slot, (750, 20))
     else:
-        surface.blit(foundation_3[1], (750, 20))
+        surface.blit(foundation_3[-1].frontside, (750, 20))
     if len(foundation_4) == 0:
         surface.blit(empty_slot, (896, 20))
     else:
-        surface.blit(foundation_4[1], (896, 20))
+        surface.blit(foundation_4[-1].frontside, (896, 20))
 
 
 def rebuild_stock_pile() -> None:
@@ -173,15 +173,16 @@ def deal_for_new_game(col:object) -> None:
 
 
 def move_card(mouse_pos:tuple, card:object)->None: 
-    print (f"Mouse: {mouse_pos}\n Card: {card.number} {card.suit}")
     card.top_x = mouse_pos[0]
     card.top_y = mouse_pos [1]
 
     surface.blit(card.frontside, (card.top_x, card.top_y))
 
-    # remove it from waste pile 
-    # add it to another pile
-    # redraw card while moving card and after new pile placement 
+
+def card_placement(pos:tuple, col:list, x:int):
+    if pos[0] >= x and pos[0] <= x + settings.card_width:
+        col.append(waste_pile.pop())
+        redraw_all()
 
 
 def main():
@@ -211,7 +212,27 @@ def main():
 
                 for card in waste_pile:
                     if card.is_clicked:
+                        card_placement(pos, col0, 20)
+                        card_placement(pos, col1, 116)
+                        card_placement(pos, col2, 312)
+                        if pos[1] < 200:
+                            card_placement(pos, foundation_1, 458)
+                        elif pos[1] >= 200:
+                            card_placement(pos, col3, 458)
+                        if pos[1] < 200:
+                            card_placement(pos, foundation_2, 604)
+                        elif pos[1] >= 200:
+                            card_placement(pos, col4, 604)
+                        if pos[1] < 200:
+                            card_placement(pos, foundation_3, 750)
+                        elif pos[1] >= 200:
+                            card_placement(pos, col5, 750)
+                        if pos[1] < 200:
+                            card_placement(pos, foundation_4, 896)
+                        elif pos[1] >= 200:
+                            card_placement(pos, col6, 896)
                         card.set_is_clicked(pos, False)
+                        
 
                 try:
                     if pos[0] >= 20 and pos[0] <= 20 + settings.card_width:
