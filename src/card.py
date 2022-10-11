@@ -47,3 +47,4 @@ class Card:
                     print(f"{self.number}, {self.suit} has been clicked")
                     self.is_clicked = clicked
                     print(f"is_clicked set to : {self.is_clicked}")
+
