@@ -188,7 +188,8 @@ def waste_card_placement(pos:tuple, col:list, x:int):
     if pos[0] >= x and pos[0] <= x + settings.card_width:
         col.append(waste_pile.pop())
         redraw_all()
-        surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
+        if len(waste_pile) > 1:
+            surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
         if len(col) > 1:
             switch_is_covered(col[-2], col[-1])
 
@@ -214,16 +215,16 @@ def main():
                 if len(waste_pile) > 0: 
                     waste_pile[-1].set_is_clicked(pos, True)
 
-                # TODO clicker validation on cols and foundations                     
-
 
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
 
                 for card in waste_pile:
-                    if card.is_clicked:
-                        # TODO Index list amount validation
-                        switch_is_covered(waste_pile[-3], waste_pile[-2])
+                    if card.is_clicked:                       
+                        if len(waste_pile) == 2:
+                            waste_pile[-2].is_covered = False
+                        elif len(waste_pile) > 2:
+                            switch_is_covered(waste_pile[-3], waste_pile[-2])
                         waste_card_placement(pos, col0, 20)
                         waste_card_placement(pos, col1, 116)
                         waste_card_placement(pos, col2, 312)
@@ -257,7 +258,8 @@ def main():
                 if waste_pile[-1].is_clicked:
                     pos = pygame.mouse.get_pos()
                     redraw_all()
-                    surface.blit(waste_pile[-2].frontside, (waste_pile[-2].top_x, waste_pile[-2].top_y))
+                    if len(waste_pile) > 1:
+                        surface.blit(waste_pile[-2].frontside, (waste_pile[-2].top_x, waste_pile[-2].top_y))
                     move_card(pos, waste_pile[-1])
     
     
