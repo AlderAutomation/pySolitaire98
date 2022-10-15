@@ -3,6 +3,7 @@ import pygame
 import settings
 import spritesheet
 import deck
+from typing import List, Dict, Set, Tuple, Union
 
 LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
 logging.basicConfig(filename="log.log", level=logging.DEBUG, format = LOG_FORMAT)
@@ -87,6 +88,12 @@ def redraw_all():
     draw_foundations()
     draw_stock_pile()
     draw_colums()
+    if len(waste_pile) > 1:
+        draw_waste_pile(-1)
+
+
+def draw_waste_pile(amount: int) -> None:
+    surface.blit(waste_pile[amount].frontside, (waste_pile[amount].top_x, waste_pile[amount].top_y))
 
 
 def draw_stock_pile() -> None:
@@ -184,14 +191,36 @@ def move_card(mouse_pos:tuple, card:object)->None:
     surface.blit(card.frontside, (card.top_x, card.top_y))
 
 
-def waste_card_placement(pos:tuple, col:list, x:int):
+def placement_checks(pos:tuple, from_pile:list ) -> None:
+    card_placement(pos, col0, 20, from_pile)
+    card_placement(pos, col1, 116, from_pile)
+    card_placement(pos, col2, 312, from_pile)
+    if pos[1] < 200:
+        card_placement(pos, foundation_1, 458, from_pile)
+    elif pos[1] >= 200:
+        card_placement(pos, col3, 458, from_pile)
+    if pos[1] < 200:
+        card_placement(pos, foundation_2, 604, from_pile)
+    elif pos[1] >= 200:
+        card_placement(pos, col4, 604, from_pile)
+    if pos[1] < 200:
+        card_placement(pos, foundation_3, 750, from_pile)
+    elif pos[1] >= 200:
+        card_placement(pos, col5, 750, from_pile)
+    if pos[1] < 200:
+        card_placement(pos, foundation_4, 896, from_pile)
+    elif pos[1] >= 200:
+        card_placement(pos, col6, 896, from_pile)
+
+
+def card_placement(pos:tuple, to_pile:list, x:int, from_pile: list):
     if pos[0] >= x and pos[0] <= x + settings.card_width:
-        col.append(waste_pile.pop())
+        to_pile.append(from_pile.pop())
         redraw_all()
-        if len(waste_pile) > 1:
-            surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
-        if len(col) > 1:
-            switch_is_covered(col[-2], col[-1])
+        if len(from_pile) > 1:
+            surface.blit(from_pile[-1].frontside, (from_pile[-1].top_x, from_pile[-1].top_y))
+        if len(to_pile) > 1:
+            switch_is_covered(to_pile[-2], to_pile[-1])
 
 
 def main():
@@ -214,10 +243,24 @@ def main():
 
                 if len(waste_pile) > 0: 
                     waste_pile[-1].set_is_clicked(pos, True)
+                
+                for col in cols:
+                    if len(col) > 0:
+                        col[-1].set_is_clicked(pos, True)
 
 
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
+
+                for col in cols:
+                    for card in col:
+                        if card.is_clicked:
+                            if len(col) == 2:
+                                col[-2].is_covered = False
+                            elif len(col) > 2:
+                                switch_is_covered(col[-3], col[-2])
+                            placement_checks(pos, col)
+                        card.set_is_clicked(pos, False)
 
                 for card in waste_pile:
                     if card.is_clicked:                       
@@ -225,28 +268,9 @@ def main():
                             waste_pile[-2].is_covered = False
                         elif len(waste_pile) > 2:
                             switch_is_covered(waste_pile[-3], waste_pile[-2])
-                        waste_card_placement(pos, col0, 20)
-                        waste_card_placement(pos, col1, 116)
-                        waste_card_placement(pos, col2, 312)
-                        if pos[1] < 200:
-                            waste_card_placement(pos, foundation_1, 458)
-                        elif pos[1] >= 200:
-                            waste_card_placement(pos, col3, 458)
-                        if pos[1] < 200:
-                            waste_card_placement(pos, foundation_2, 604)
-                        elif pos[1] >= 200:
-                            waste_card_placement(pos, col4, 604)
-                        if pos[1] < 200:
-                            waste_card_placement(pos, foundation_3, 750)
-                        elif pos[1] >= 200:
-                            waste_card_placement(pos, col5, 750)
-                        if pos[1] < 200:
-                            waste_card_placement(pos, foundation_4, 896)
-                        elif pos[1] >= 200:
-                            waste_card_placement(pos, col6, 896)
-                        card.set_is_clicked(pos, False)
-                        
-
+                        placement_checks(pos, waste_pile)
+                    card.set_is_clicked(pos, False)
+                     
                 try:
                     if pos[0] >= 20 and pos[0] <= 20 + settings.card_width:
                         if pos[1] >= 20 and pos[1] <= 20 + settings.card_height:
@@ -261,8 +285,15 @@ def main():
                     if len(waste_pile) > 1:
                         surface.blit(waste_pile[-2].frontside, (waste_pile[-2].top_x, waste_pile[-2].top_y))
                     move_card(pos, waste_pile[-1])
-    
-    
+
+            for col in cols:
+                if event.type == pygame.MOUSEMOTION and len(col) > 0:
+                    if col[-1].is_clicked:
+                        pos = pygame.mouse.get_pos()
+                        redraw_all()
+                        move_card(pos, col[-1])
+
+
         clock.tick(FPS)
 
         pygame.display.flip()
