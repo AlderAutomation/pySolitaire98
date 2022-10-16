@@ -3,11 +3,9 @@ import pygame
 import settings
 import spritesheet
 import deck
-from typing import List, Dict, Set, Tuple, Union
+import my_logger
 
-LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
-logging.basicConfig(filename="log.log", level=logging.DEBUG, format = LOG_FORMAT)
-my_logger = logging.getLogger()
+my_log = my_logger.Default().my_logger
 
 pygame.init()
 
@@ -104,25 +102,25 @@ def draw_stock_pile() -> None:
 
 def draw_foundations() -> None:
     if len(foundation_1) == 0:
-        surface.blit(empty_slot, (458, 20))
+        surface.blit(empty_slot, (settings.col3_x, settings.row0_y))
     else:
-        surface.blit(foundation_1[-1].frontside, (458, 20))
+        surface.blit(foundation_1[-1].frontside, (settings.col3_x, settings.row0_y))
     if len(foundation_2) == 0:
-        surface.blit(empty_slot, (604, 20))
+        surface.blit(empty_slot, (settings.col4_x, settings.row0_y))
     else:
-        surface.blit(foundation_2[-1].frontside, (604, 20))
+        surface.blit(foundation_2[-1].frontside, (settings.col4_x, settings.row0_y))
     if len(foundation_3) == 0:
-        surface.blit(empty_slot, (750, 20))
+        surface.blit(empty_slot, (settings.col5_x, settings.row0_y))
     else:
-        surface.blit(foundation_3[-1].frontside, (750, 20))
+        surface.blit(foundation_3[-1].frontside, (settings.col5_x, settings.row0_y))
     if len(foundation_4) == 0:
-        surface.blit(empty_slot, (896, 20))
+        surface.blit(empty_slot, (settings.col6_x, settings.row0_y))
     else:
-        surface.blit(foundation_4[-1].frontside, (896, 20))
+        surface.blit(foundation_4[-1].frontside, (settings.col6_x, settings.row0_y))
 
 
 def rebuild_stock_pile() -> None:
-    my_logger.debug("Rebuilding Stock Pile")
+    my_log.debug("Rebuilding Stock Pile")
 
     while len(waste_pile) > 0:
         dealer.rebuild_from_discard(waste_pile[0])
@@ -195,18 +193,22 @@ def placement_checks(pos:tuple, from_pile:list ) -> None:
     card_placement(pos, col0, 20, from_pile)
     card_placement(pos, col1, 116, from_pile)
     card_placement(pos, col2, 312, from_pile)
+
     if pos[1] < 200:
         card_placement(pos, foundation_1, 458, from_pile)
     elif pos[1] >= 200:
         card_placement(pos, col3, 458, from_pile)
+
     if pos[1] < 200:
         card_placement(pos, foundation_2, 604, from_pile)
     elif pos[1] >= 200:
         card_placement(pos, col4, 604, from_pile)
+
     if pos[1] < 200:
         card_placement(pos, foundation_3, 750, from_pile)
     elif pos[1] >= 200:
         card_placement(pos, col5, 750, from_pile)
+
     if pos[1] < 200:
         card_placement(pos, foundation_4, 896, from_pile)
     elif pos[1] >= 200:
