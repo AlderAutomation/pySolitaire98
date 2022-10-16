@@ -148,19 +148,19 @@ def new_game_deal():
 
 
 def draw_colums() -> None:
-        x_y_for_col(20,200,col0)
+        x_y_for_col(settings.col0_x, settings.row1_y, col0)
         deal_for_new_game(col0)
-        x_y_for_col(166,200,col1)
+        x_y_for_col(settings.col1_x, settings.row1_y, col1)
         deal_for_new_game(col1)
-        x_y_for_col(312,200,col2)
+        x_y_for_col(settings.col2_x, settings.row1_y, col2)
         deal_for_new_game(col2)
-        x_y_for_col(458,200,col3)
+        x_y_for_col(settings.col3_x, settings.row1_y, col3)
         deal_for_new_game(col3)
-        x_y_for_col(604,200,col4)
+        x_y_for_col(settings.col4_x, settings.row1_y, col4)
         deal_for_new_game(col4)
-        x_y_for_col(750,200,col5)
+        x_y_for_col(settings.col5_x, settings.row1_y, col5)
         deal_for_new_game(col5)
-        x_y_for_col(896,200,col6)
+        x_y_for_col(settings.col6_x, settings.row1_y, col6)
         deal_for_new_game(col6)
 
     
@@ -171,7 +171,7 @@ def x_y_for_col(x:int, y:int, col:object) -> None:
         card.top_x = x
         card.top_y = temp_y
     
-        temp_y = temp_y + 20
+        temp_y = temp_y + settings.row0_y
 
 
 def deal_for_new_game(col:object) -> None:
@@ -245,6 +245,7 @@ def main():
 
                 if len(waste_pile) > 0: 
                     waste_pile[-1].set_is_clicked(pos, True)
+
                 
                 for col in cols:
                     if len(col) > 0:

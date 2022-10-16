@@ -34,7 +34,7 @@ class Deck:
         if len(self.card_deck) == 0:
             return False
         else:
-            my_log.debug(f'Dealing {self.card_deck[index]}')
+            my_log.debug(f'Dealing {self.card_deck[index].number} of {self.card_deck[index].suit}')
             return self.card_deck.pop(index)
 
     

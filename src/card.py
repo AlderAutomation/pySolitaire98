@@ -1,4 +1,7 @@
 import settings
+import my_logger
+
+my_log = my_logger.Default().my_logger
 
 class Card:
     
@@ -43,5 +46,6 @@ class Card:
                 if self.face == "up" and self.is_covered == False:
                     print(f"{self.number}, {self.suit} has been clicked")
                     self.is_clicked = clicked
+                    my_log.debug(f'{self.number} of {self.suit} is clicked: {self.is_clicked}')
                     print(f"is_clicked set to : {self.is_clicked}")
 
