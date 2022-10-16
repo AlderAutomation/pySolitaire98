@@ -17,7 +17,7 @@ class Deck:
         image = pygame.image.load("./assets/image/spritesheet.png").convert_alpha()
         sprite_sheet =  spritesheet.SpriteSheet(image)
 
-        backside = sprite_sheet.get_image(settings.castle, 4, 71, 96, settings.scale)
+        backside = sprite_sheet.get_image(settings.black_rose, 4, 71, 96, settings.scale)
 
         self.card_deck = []
         for suit in suits:

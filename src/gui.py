@@ -190,29 +190,29 @@ def move_card(mouse_pos:tuple, card:object)->None:
 
 
 def placement_checks(pos:tuple, from_pile:list ) -> None:
-    card_placement(pos, col0, 20, from_pile)
-    card_placement(pos, col1, 116, from_pile)
-    card_placement(pos, col2, 312, from_pile)
+    card_placement(pos, col0, settings.col0_x, from_pile)
+    card_placement(pos, col1, settings.col1_x, from_pile)
+    card_placement(pos, col2, settings.col2_x, from_pile)
 
-    if pos[1] < 200:
-        card_placement(pos, foundation_1, 458, from_pile)
-    elif pos[1] >= 200:
-        card_placement(pos, col3, 458, from_pile)
+    if pos[1] < settings.row1_y:
+        card_placement(pos, foundation_1, settings.col3_x, from_pile)
+    elif pos[1] >= settings.row1_y:
+        card_placement(pos, col3, settings.col3_x, from_pile)
 
-    if pos[1] < 200:
-        card_placement(pos, foundation_2, 604, from_pile)
-    elif pos[1] >= 200:
-        card_placement(pos, col4, 604, from_pile)
+    if pos[1] < settings.row1_y:
+        card_placement(pos, foundation_2, settings.col4_x, from_pile)
+    elif pos[1] >= settings.row1_y:
+        card_placement(pos, col4, settings.col4_x, from_pile)
 
-    if pos[1] < 200:
-        card_placement(pos, foundation_3, 750, from_pile)
-    elif pos[1] >= 200:
-        card_placement(pos, col5, 750, from_pile)
+    if pos[1] < settings.row1_y:
+        card_placement(pos, foundation_3, settings.col5_x, from_pile)
+    elif pos[1] >= settings.row1_y:
+        card_placement(pos, col5, settings.col5_x, from_pile)
 
-    if pos[1] < 200:
-        card_placement(pos, foundation_4, 896, from_pile)
-    elif pos[1] >= 200:
-        card_placement(pos, col6, 896, from_pile)
+    if pos[1] < settings.row1_y:
+        card_placement(pos, foundation_4, settings.col6_x, from_pile)
+    elif pos[1] >= settings.row1_y:
+        card_placement(pos, col6, settings.col6_x, from_pile)
 
 
 def card_placement(pos:tuple, to_pile:list, x:int, from_pile: list):
@@ -274,8 +274,8 @@ def main():
                     card.set_is_clicked(pos, False)
                      
                 try:
-                    if pos[0] >= 20 and pos[0] <= 20 + settings.card_width:
-                        if pos[1] >= 20 and pos[1] <= 20 + settings.card_height:
+                    if pos[0] >= settings.col0_x and pos[0] <= settings.col0_x + settings.card_width:
+                        if pos[1] >= settings.row0_y and pos[1] <= settings.row0_y + settings.card_height:
                             deal_cards()
                 except:
                     deal_cards()
