@@ -40,6 +40,7 @@ class Card:
         else:
             self.rotation = "portrait"
 
+
     def set_is_clicked (self, pos:tuple, clicked:bool) -> None:
         if pos[0] >= self.top_x and pos[0] <= self.top_x + settings.card_width:
             if pos[1] >= self.top_y and pos[1] <= self.top_y + settings.card_height:
@@ -49,3 +50,4 @@ class Card:
                     my_log.debug(f'{self.number} of {self.suit} is clicked: {self.is_clicked}')
                     print(f"is_clicked set to : {self.is_clicked}")
 
+                    

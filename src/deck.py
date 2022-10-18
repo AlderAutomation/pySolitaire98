@@ -40,7 +40,7 @@ class Deck:
     
     def display(self) -> None:
         for card in self.card_deck:
-            print(f'{card.number} {card.suit} \n {card.image}')
+            print(f'{card.number} {card.suit}')
 
 
     def reset_deck(self):
