@@ -1,5 +1,5 @@
-import card 
-import deck 
+import card
+import deck
 import pygame
 import random 
 import settings
