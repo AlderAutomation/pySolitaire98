@@ -5,7 +5,6 @@ import spritesheet
 import deck
 import my_logger
 
-
 my_log = my_logger.Default().my_logger
 
 pygame.init()
@@ -79,7 +78,9 @@ def deal_cards() -> None:
 
 def switch_is_covered(card_to_cover:object, card_on_top:object) -> None: 
     card_on_top.is_covered = False
+    my_log.debug(f"{card_on_top.number} of {card_on_top.suit} is now uncovered and is face {card_on_top.face}")
     card_to_cover.is_covered = True
+    my_log.debug(f"{card_to_cover.number} of {card_to_cover.suit} is now covered and is face {card_to_cover.face}")
 
 
 def redraw_all():
@@ -147,7 +148,6 @@ def new_game_deal():
         draw_colums()
 
 
-
 def draw_colums() -> None:
         x_y_for_col(settings.col0_x, settings.row1_y, col0)
         deal_for_new_game(col0)
@@ -184,6 +184,7 @@ def deal_for_new_game(col:object) -> None:
 
 
 def move_card(mouse_pos:tuple, card:object)->None: 
+    # Card Dragging and drawing function
     card.top_x = mouse_pos[0]
     card.top_y = mouse_pos [1]
 
@@ -216,12 +217,13 @@ def placement_checks(pos:tuple, from_pile:list ) -> None:
         card_placement(pos, col6, settings.col6_x, from_pile)
 
 
+# Check here
 def card_placement(pos:tuple, to_pile:list, x:int, from_pile: list):
     if pos[0] >= x and pos[0] <= x + settings.card_width:
         to_pile.append(from_pile.pop())
         redraw_all()
         if len(from_pile) > 1:
-            surface.blit(from_pile[-1].frontside, (from_pile[-1].top_x, from_pile[-1].top_y))
+            surface.blit(from_pile[-1].backside, (from_pile[-1].top_x, from_pile[-1].top_y))
         if len(to_pile) > 1:
             switch_is_covered(to_pile[-2], to_pile[-1])
 
@@ -258,7 +260,7 @@ def main():
 
                 for col in cols:
                     for card in col:
-                        if card.is_clicked:
+                        if card.is_clicked: 
                             if len(col) == 2:
                                 col[-2].is_covered = False
                             elif len(col) > 2:
