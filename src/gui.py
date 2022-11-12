@@ -62,7 +62,7 @@ def deal_cards() -> None:
             waste_pile[-2].is_covered = True
         surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
         pygame.display.update()
-        print(f"Remaining cards: {len(dealer.card_deck)}")
+        my_log.debug(f"Remaining cards: {len(dealer.card_deck)}")
         if len(dealer.card_deck) == 0 and dealer.is_out_of_cards == False:
             dealer.is_out_of_cards = True
             
@@ -228,6 +228,11 @@ def card_placement(pos:tuple, to_pile:list, x:int, from_pile: list):
             switch_is_covered(to_pile[-2], to_pile[-1])
 
 
+def col_flip_check(col: list):
+    if col[-1].face == "down" and col[-1].is_covered == False:
+        return  True
+
+
 def main():
     running = True
     
@@ -258,7 +263,11 @@ def main():
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
 
+
                 for col in cols:
+                    if col_flip_check(col):
+                        col[-1].flip_card()
+                        my_log.debug(f"{col[-1].number} of {col[-1].suit} has been flipped")
                     for card in col:
                         if card.is_clicked: 
                             if len(col) == 2:
@@ -267,6 +276,7 @@ def main():
                                 switch_is_covered(col[-3], col[-2])
                             placement_checks(pos, col)
                         card.set_is_clicked(pos, False)
+                    redraw_all()
 
                 for card in waste_pile:
                     if card.is_clicked:                       
