@@ -212,11 +212,22 @@ def foundation_checks(foundation:list, from_pile: list) -> bool:
     return can_place   
 
 
+def col_checks(col:list, from_pile:list) -> bool:
+    can_place = False
+    
+    if len(col) == 0 and from_pile[-1].number == 13:
+        can_place = True
+    
+    return can_place
+
 
 def placement_checks(pos:tuple, from_pile:list ) -> None:
-    card_placement(pos, col0, settings.col0_x, from_pile)
-    card_placement(pos, col1, settings.col1_x, from_pile)
-    card_placement(pos, col2, settings.col2_x, from_pile)
+    if col_checks(col0, from_pile):
+        card_placement(pos, col0, settings.col0_x, from_pile)
+    if col_checks(col1, from_pile):
+        card_placement(pos, col1, settings.col1_x, from_pile)
+    if col_checks(col2, from_pile):
+        card_placement(pos, col2, settings.col2_x, from_pile)
 
     if pos[1] < settings.row1_y:
         if foundation_checks(foundation_1, from_pile):
