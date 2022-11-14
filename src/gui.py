@@ -202,22 +202,12 @@ def foundation_checks(foundation:list, from_pile: list) -> bool:
         suit = foundation[0].suit
 
     if len(foundation) == 0: 
-        if from_pile[-1].number == "A":
+        if from_pile[-1].number == 1:
             can_place = True
     
     if from_pile[-1].suit == suit:
-        if len(foundation) == 10:
-            if from_pile[-1].number == "J":
-                can_place = True
-        elif len(foundation) == 11:
-            if from_pile[-1].number == "Q":
-                can_place = True
-        elif len(foundation) == 12:
-            if from_pile[-1].number == "K":
-                can_place = True
-        elif type(from_pile[-1].number) == int:
-            if (from_pile[-1].number - len(foundation)) == 1:
-                can_place = True
+        if from_pile[-1].number > 1 and (from_pile[-1].number - len(foundation)) == 1:
+            can_place = True
     
     return can_place   
 

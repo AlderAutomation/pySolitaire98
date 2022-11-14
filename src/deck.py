@@ -7,7 +7,7 @@ import my_logger
 
 my_log = my_logger.Default().my_logger
 
-numbers = ['A',2,3,4,5,6,7,8,9,10,'J','Q','K']
+numbers = [1,2,3,4,5,6,7,8,9,10,11,12,13]
 suits = ['clubs', 'diamonds', 'hearts', 'spades']
 
 class Deck:
