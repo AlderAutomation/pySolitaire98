@@ -195,21 +195,29 @@ def move_card(mouse_pos:tuple, card:object)->None:
 
 def foundation_checks(foundation:list, from_pile: list) -> bool: 
     can_place = False
+
+    if len(foundation) == 0:
+        suit = from_pile[-1].suit
+    else:
+        suit = foundation[0].suit
+
     if len(foundation) == 0: 
         if from_pile[-1].number == "A":
             can_place = True
-    elif len(foundation) == 10:
-        if from_pile[-1].number == "J":
-            can_place = True
-    elif len(foundation) == 11:
-        if from_pile[-1].number == "Q":
-            can_place = True
-    elif len(foundation) == 12:
-        if from_pile[-1].number == "K":
-            can_place = True
-    elif type(from_pile[-1].number) == int:
-        if (from_pile[-1].number - len(foundation)) == 1:
-            can_place = True
+    
+    if from_pile[-1].suit == suit:
+        if len(foundation) == 10:
+            if from_pile[-1].number == "J":
+                can_place = True
+        elif len(foundation) == 11:
+            if from_pile[-1].number == "Q":
+                can_place = True
+        elif len(foundation) == 12:
+            if from_pile[-1].number == "K":
+                can_place = True
+        elif type(from_pile[-1].number) == int:
+            if (from_pile[-1].number - len(foundation)) == 1:
+                can_place = True
     
     return can_place   
 
@@ -227,17 +235,20 @@ def placement_checks(pos:tuple, from_pile:list ) -> None:
         card_placement(pos, col3, settings.col3_x, from_pile)
 
     if pos[1] < settings.row1_y:
-        card_placement(pos, foundation_2, settings.col4_x, from_pile)
+        if foundation_checks(foundation_2, from_pile):
+            card_placement(pos, foundation_2, settings.col4_x, from_pile)
     elif pos[1] >= settings.row1_y:
         card_placement(pos, col4, settings.col4_x, from_pile)
 
     if pos[1] < settings.row1_y:
-        card_placement(pos, foundation_3, settings.col5_x, from_pile)
+        if foundation_checks(foundation_3, from_pile):
+            card_placement(pos, foundation_3, settings.col5_x, from_pile)
     elif pos[1] >= settings.row1_y:
         card_placement(pos, col5, settings.col5_x, from_pile)
 
     if pos[1] < settings.row1_y:
-        card_placement(pos, foundation_4, settings.col6_x, from_pile)
+        if foundation_checks(foundation_4, from_pile):
+            card_placement(pos, foundation_4, settings.col6_x, from_pile)
     elif pos[1] >= settings.row1_y:
         card_placement(pos, col6, settings.col6_x, from_pile)
 
