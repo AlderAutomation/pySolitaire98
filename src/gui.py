@@ -30,9 +30,9 @@ out_of_cards = sprite_sheet.get_image(1, 5, 71, 96, settings.scale)
 pygame.display.flip()
 
 # game init'ing
-dealer = deck.Deck()
-dealer.shuffle()
-waste_pile = []
+stock = deck.Deck()
+stock.shuffle()
+talon = []
 clock = pygame.time.Clock()
 FPS = 60
 
@@ -54,26 +54,26 @@ col6 = []
 cols = [col0, col1, col2, col3, col4, col5, col6]
 
 def deal_cards() -> None:
-    if len(dealer.card_deck) > 0:
-        waste_pile.append(dealer.deal())
-        waste_pile[-1].top_x = 166
-        waste_pile[-1].top_y = 20
-        waste_pile[-1].face = "up"
-        waste_pile[-1].is_covered = False
-        if len(waste_pile) > 1:
-            waste_pile[-2].is_covered = True
-        surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
+    if len(stock.card_deck) > 0:
+        talon.append(stock.deal())
+        talon[-1].top_x = 166
+        talon[-1].top_y = 20
+        talon[-1].face = "up"
+        talon[-1].is_covered = False
+        if len(talon) > 1:
+            talon[-2].is_covered = True
+        surface.blit(talon[-1].frontside, (talon[-1].top_x, talon[-1].top_y))
         pygame.display.update()
-        my_log.debug(f"Remaining cards: {len(dealer.card_deck)}")
-        if len(dealer.card_deck) == 0 and dealer.is_out_of_cards == False:
-            dealer.is_out_of_cards = True
+        my_log.debug(f"Remaining cards: {len(stock.card_deck)}")
+        if len(stock.card_deck) == 0 and stock.is_out_of_cards == False:
+            stock.is_out_of_cards = True
             
             surface.fill(color)
-            surface.blit(waste_pile[-1].frontside, (waste_pile[-1].top_x, waste_pile[-1].top_y))
+            surface.blit(talon[-1].frontside, (talon[-1].top_x, talon[-1].top_y))
             draw_colums()
             draw_foundations()
             surface.blit(out_of_cards, (20, 20))
-    elif len(dealer.card_deck) == 0 and dealer.is_out_of_cards == True:
+    elif len(stock.card_deck) == 0 and stock.is_out_of_cards == True:
         rebuild_stock_pile()
         redraw_all()
 
@@ -90,18 +90,18 @@ def redraw_all():
     draw_foundations()
     draw_stock_pile()
     draw_colums()
-    if len(waste_pile) > 1:
-        draw_waste_pile(-1)
+    if len(talon) > 1:
+        draw_talon(-1)
 
 
-def draw_waste_pile(amount: int) -> None:
-    surface.blit(waste_pile[amount].frontside, (waste_pile[amount].top_x, waste_pile[amount].top_y))
+def draw_talon(amount: int) -> None:
+    surface.blit(talon[amount].frontside, (talon[amount].top_x, talon[amount].top_y))
 
 
 def draw_stock_pile() -> None:
-    surface.blit(dealer.card_deck[-1].backside, (20, 20))
-    surface.blit(dealer.card_deck[-1].backside, (30, 20))
-    surface.blit(dealer.card_deck[-1].backside, (40, 20))
+    surface.blit(stock.card_deck[-1].backside, (20, 20))
+    surface.blit(stock.card_deck[-1].backside, (30, 20))
+    surface.blit(stock.card_deck[-1].backside, (40, 20))
 
 
 def draw_foundations() -> None:
@@ -126,11 +126,11 @@ def draw_foundations() -> None:
 def rebuild_stock_pile() -> None:
     my_log.debug("Rebuilding Stock Pile")
 
-    while len(waste_pile) > 0:
-        dealer.rebuild_from_discard(waste_pile[0])
-        waste_pile.pop(0)
+    while len(talon) > 0:
+        stock.rebuild_from_discard(talon[0])
+        talon.pop(0)
     
-    dealer.is_out_of_cards = False
+    stock.is_out_of_cards = False
 
 
 def new_game_deal():
@@ -140,7 +140,7 @@ def new_game_deal():
     while len(col6) < 7:
         
         for col in cols:
-            col.append(dealer.deal())
+            col.append(stock.deal())
 
         flipme = cols.pop(0)
 
@@ -278,8 +278,8 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
 
-                if len(waste_pile) > 0: 
-                    waste_pile[-1].set_is_clicked(pos, True)
+                if len(talon) > 0: 
+                    talon[-1].set_is_clicked(pos, True)
 
                 
                 for col in cols:
@@ -305,13 +305,13 @@ def main():
                         card.set_is_clicked(pos, False)
                     redraw_all()
 
-                for card in waste_pile:
+                for card in talon:
                     if card.is_clicked:                       
-                        if len(waste_pile) == 2:
-                            waste_pile[-2].is_covered = False
-                        elif len(waste_pile) > 2:
-                            switch_is_covered(waste_pile[-3], waste_pile[-2])
-                        placement_checks(pos, waste_pile)
+                        if len(talon) == 2:
+                            talon[-2].is_covered = False
+                        elif len(talon) > 2:
+                            switch_is_covered(talon[-3], talon[-2])
+                        placement_checks(pos, talon)
                     card.set_is_clicked(pos, False)
                      
                 try:
@@ -321,13 +321,13 @@ def main():
                 except:
                     deal_cards()
 
-            if event.type == pygame.MOUSEMOTION and len(waste_pile) > 0:
-                if waste_pile[-1].is_clicked:
+            if event.type == pygame.MOUSEMOTION and len(talon) > 0:
+                if talon[-1].is_clicked:
                     pos = pygame.mouse.get_pos()
                     redraw_all()
-                    if len(waste_pile) > 1:
-                        surface.blit(waste_pile[-2].frontside, (waste_pile[-2].top_x, waste_pile[-2].top_y))
-                    move_card(pos, waste_pile[-1])
+                    if len(talon) > 1:
+                        surface.blit(talon[-2].frontside, (talon[-2].top_x, talon[-2].top_y))
+                    move_card(pos, talon[-1])
 
             for col in cols:
                 if event.type == pygame.MOUSEMOTION and len(col) > 0:
