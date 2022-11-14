@@ -41,6 +41,8 @@ foundation_2 = []
 foundation_3 = []
 foundation_4 = []
 
+foundations = [foundation_1, foundation_2, foundation_3, foundation_4]
+
 col0 = []
 col1 = []
 col2 = []
@@ -191,13 +193,36 @@ def move_card(mouse_pos:tuple, card:object)->None:
     surface.blit(card.frontside, (card.top_x, card.top_y))
 
 
+def foundation_checks(foundation:list, from_pile: list) -> bool: 
+    can_place = False
+    if len(foundation) == 0: 
+        if from_pile[-1].number == "A":
+            can_place = True
+    elif len(foundation) == 10:
+        if from_pile[-1].number == "J":
+            can_place = True
+    elif len(foundation) == 11:
+        if from_pile[-1].number == "Q":
+            can_place = True
+    elif len(foundation) == 12:
+        if from_pile[-1].number == "K":
+            can_place = True
+    elif type(from_pile[-1].number) == int:
+        if (from_pile[-1].number - len(foundation)) == 1:
+            can_place = True
+    
+    return can_place   
+
+
+
 def placement_checks(pos:tuple, from_pile:list ) -> None:
     card_placement(pos, col0, settings.col0_x, from_pile)
     card_placement(pos, col1, settings.col1_x, from_pile)
     card_placement(pos, col2, settings.col2_x, from_pile)
 
     if pos[1] < settings.row1_y:
-        card_placement(pos, foundation_1, settings.col3_x, from_pile)
+        if foundation_checks(foundation_1, from_pile):
+            card_placement(pos, foundation_1, settings.col3_x, from_pile)
     elif pos[1] >= settings.row1_y:
         card_placement(pos, col3, settings.col3_x, from_pile)
 
@@ -217,7 +242,6 @@ def placement_checks(pos:tuple, from_pile:list ) -> None:
         card_placement(pos, col6, settings.col6_x, from_pile)
 
 
-# Check here
 def card_placement(pos:tuple, to_pile:list, x:int, from_pile: list):
     if pos[0] >= x and pos[0] <= x + settings.card_width:
         to_pile.append(from_pile.pop())
@@ -229,7 +253,9 @@ def card_placement(pos:tuple, to_pile:list, x:int, from_pile: list):
 
 
 def col_flip_check(col: list):
-    if col[-1].face == "down" and col[-1].is_covered == False:
+    if len(col) == 0:
+        return False
+    elif col[-1].face == "down" and col[-1].is_covered == False:
         return  True
 
 
