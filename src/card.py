@@ -48,5 +48,6 @@ class Card:
                     my_log.debug(f"{self.number}, {self.suit} has been clicked")
                     self.is_clicked = clicked
                     my_log.debug(f'{self.number} of {self.suit} is clicked: {self.is_clicked}')
+                    print(f'{self.number} of {self.suit} is clicked: {self.is_clicked}')
 
                     
