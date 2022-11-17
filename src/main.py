@@ -112,11 +112,14 @@ class Controller():
 
         elif pos[1] >= settings.row1_y:
             if pos[0] >= settings.col0_x and pos[0] <= settings.col0_x + settings.card_width:
-                self.card_placement(gui, pos, self.col0, settings.col0_x, from_pile)
+                if self.col_checks(self.col0, from_pile):
+                    self.card_placement(gui, pos, self.col0, settings.col0_x, from_pile)
             if pos[0] >= settings.col1_x and pos[0] <= settings.col1_x + settings.card_width:
-                self.card_placement(gui, pos, self.col1, settings.col1_x, from_pile)
+                if self.col_checks(self.col1, from_pile):
+                    self.card_placement(gui, pos, self.col1, settings.col1_x, from_pile)
             if pos[0] >= settings.col2_x and pos[0] <= settings.col2_x + settings.card_width:
-                self.card_placement(gui, pos, self.col2, settings.col2_x, from_pile)
+                if self.col_checks(self.col2, from_pile):
+                    self.card_placement(gui, pos, self.col2, settings.col2_x, from_pile)
             if pos[0] >= settings.col3_x and pos[0] <= settings.col3_x + settings.card_width:
                 self.card_placement(gui, pos, self.col3, settings.col3_x, from_pile)
             if pos[0] >= settings.col4_x and pos[0] <= settings.col4_x + settings.card_width:
@@ -127,20 +130,20 @@ class Controller():
                 self.card_placement(gui, pos, self.col6, settings.col6_x, from_pile)
 
 
-
-
     def col_checks(self, col:list, from_pile:list) -> bool:
         # TODO need to finish adding col checks to remaing cols
         # also need to add more checks, right now only testing for 
         # 0 col length for King placement 
 
-        # can_place = False
+        can_place = False
         
-        # if len(col) == 0 and from_pile[-1].number == 13:
-        #     can_place = True
-        
-        # return can_place
-        pass
+        if len(col) == 0 and from_pile[-1].number == 13:
+            can_place = True
+        else:
+            if len(col) > 0 and col[-1].colour != from_pile[-1].colour:
+                can_place = True
+
+        return can_place
 
 
     def foundation_checks(self, foundation:list, from_pile: list) -> bool: 
