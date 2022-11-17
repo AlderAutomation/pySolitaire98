@@ -121,26 +121,26 @@ class Controller():
                 if self.col_checks(self.col2, from_pile):
                     self.card_placement(gui, pos, self.col2, settings.col2_x, from_pile)
             if pos[0] >= settings.col3_x and pos[0] <= settings.col3_x + settings.card_width:
-                self.card_placement(gui, pos, self.col3, settings.col3_x, from_pile)
+                if self.col_checks(self.col3, from_pile):
+                    self.card_placement(gui, pos, self.col3, settings.col3_x, from_pile)
             if pos[0] >= settings.col4_x and pos[0] <= settings.col4_x + settings.card_width:
-                self.card_placement(gui, pos, self.col4, settings.col4_x, from_pile)
+                if self.col_checks(self.col4, from_pile):
+                    self.card_placement(gui, pos, self.col4, settings.col4_x, from_pile)
             if pos[0] >= settings.col5_x and pos[0] <= settings.col5_x + settings.card_width:
-                self.card_placement(gui, pos, self.col5, settings.col5_x, from_pile)
+                if self.col_checks(self.col5, from_pile):
+                    self.card_placement(gui, pos, self.col5, settings.col5_x, from_pile)
             if pos[0] >= settings.col6_x and pos[0] <= settings.col6_x + settings.card_width:
-                self.card_placement(gui, pos, self.col6, settings.col6_x, from_pile)
+                if self.col_checks(self.col6, from_pile):
+                    self.card_placement(gui, pos, self.col6, settings.col6_x, from_pile)
 
 
     def col_checks(self, col:list, from_pile:list) -> bool:
-        # TODO need to finish adding col checks to remaing cols
-        # also need to add more checks, right now only testing for 
-        # 0 col length for King placement 
-
         can_place = False
         
         if len(col) == 0 and from_pile[-1].number == 13:
             can_place = True
         else:
-            if len(col) > 0 and col[-1].colour != from_pile[-1].colour:
+            if len(col) > 0 and col[-1].colour != from_pile[-1].colour and col[-1].number - 1 == from_pile[-1].number:
                 can_place = True
 
         return can_place
