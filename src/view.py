@@ -27,7 +27,7 @@ class SolitaireGUI():
         sprite_sheet =  spritesheet.SpriteSheet(image)
 
         self.empty_slot = sprite_sheet.get_image(0, 4, 71, 96, settings.scale)
-        out_of_cards = sprite_sheet.get_image(1, 5, 71, 96, settings.scale)
+        self.out_of_cards = sprite_sheet.get_image(1, 5, 71, 96, settings.scale)
 
         pygame.display.flip()
 
@@ -66,13 +66,6 @@ class SolitaireGUI():
 
 
     def draw_colums(self, col0, col1, col2, col3, col4, col5, col6) -> None:
-        # x = settings.col0_x
-
-        # for col in cols:
-        #     self.x_y_for_col(x, settings.row1_y, col)
-        #     self.deal_for_new_game(col)
-        #     x = x + 146
-
         self.x_y_for_col(settings.col0_x, settings.row1_y, col0)
         self.deal_for_new_game(col0)
         self.x_y_for_col(settings.col1_x, settings.row1_y, col1)
@@ -191,7 +184,6 @@ class SolitaireGUI():
                             pos = pygame.mouse.get_pos()
                             self.move_card(pos, col[-1])
 
-                self.redraw_all(game)
 
             self.clock.tick(self.FPS)
 
