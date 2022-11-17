@@ -81,6 +81,8 @@ class Controller():
 
             gui.draw_colums(self.col0, self.col1, self.col2, self.col3, self.col4, self.col5, self.col6)
 
+        self.cols = [self.col0, self.col1, self.col2, self.col3, self.col4, self.col5, self.col6]
+
 
     def card_placement(self, gui, pos:tuple, to_pile:list, x:int, from_pile: list):
         if pos[0] >= x and pos[0] <= x + settings.card_width:
@@ -93,36 +95,38 @@ class Controller():
 
 
     def placement_checks(self, gui,  pos:tuple, from_pile:list ) -> None:
-        if self.col_checks(self.col0, from_pile):
-            self.card_placement(gui, pos, self.col0, settings.col0_x, from_pile)
-        if self.col_checks(self.col1, from_pile):
-            self.card_placement(gui, pos, self.col1, settings.col1_x, from_pile)
-        if self.col_checks(self.col2, from_pile):
-            self.card_placement(gui, pos, self.col2, settings.col2_x, from_pile)
 
         if pos[1] < settings.row1_y:
-            if self.foundation_checks(self.foundation_1, from_pile):
-                self.card_placement(gui, pos, self.foundation_1, settings.col3_x, from_pile)
-        elif pos[1] >= settings.row1_y:
-            self.card_placement(gui, pos, self.col3, settings.col3_x, from_pile)
+            if pos[0] >= settings.col3_x and pos[0] <= settings.col3_x + settings.card_width:
+                if self.foundation_checks(self.foundation_1, from_pile):
+                    self.card_placement(gui, pos, self.foundation_1, settings.col3_x, from_pile)
+            if pos[0] >= settings.col4_x and pos[0] <= settings.col4_x + settings.card_width:
+                if self.foundation_checks(self.foundation_2, from_pile):
+                    self.card_placement(gui, pos, self.foundation_2, settings.col4_x, from_pile)
+            if pos[0] >= settings.col5_x and pos[0] <= settings.col5_x + settings.card_width:
+                if self.foundation_checks(self.foundation_1, from_pile):
+                    self.card_placement(gui, pos, self.foundation_1, settings.col5_x, from_pile)
+            if pos[0] >= settings.col6_x and pos[0] <= settings.col6_x + settings.card_width:
+                if self.foundation_checks(self.foundation_2, from_pile):
+                    self.card_placement(gui, pos, self.foundation_2, settings.col6_x, from_pile)
 
-        if pos[1] < settings.row1_y:
-            if self.foundation_checks(self.foundation_2, from_pile):
-                self.card_placement(gui, pos, self.foundation_2, settings.col4_x, from_pile)
         elif pos[1] >= settings.row1_y:
-            self.card_placement(gui, pos, self.col4, settings.col4_x, from_pile)
+            if pos[0] >= settings.col0_x and pos[0] <= settings.col0_x + settings.card_width:
+                self.card_placement(gui, pos, self.col0, settings.col0_x, from_pile)
+            if pos[0] >= settings.col1_x and pos[0] <= settings.col1_x + settings.card_width:
+                self.card_placement(gui, pos, self.col1, settings.col1_x, from_pile)
+            if pos[0] >= settings.col2_x and pos[0] <= settings.col2_x + settings.card_width:
+                self.card_placement(gui, pos, self.col2, settings.col2_x, from_pile)
+            if pos[0] >= settings.col3_x and pos[0] <= settings.col3_x + settings.card_width:
+                self.card_placement(gui, pos, self.col3, settings.col3_x, from_pile)
+            if pos[0] >= settings.col4_x and pos[0] <= settings.col4_x + settings.card_width:
+                self.card_placement(gui, pos, self.col4, settings.col4_x, from_pile)
+            if pos[0] >= settings.col5_x and pos[0] <= settings.col5_x + settings.card_width:
+                self.card_placement(gui, pos, self.col5, settings.col5_x, from_pile)
+            if pos[0] >= settings.col6_x and pos[0] <= settings.col6_x + settings.card_width:
+                self.card_placement(gui, pos, self.col6, settings.col6_x, from_pile)
 
-        if pos[1] < settings.row1_y:
-            if self.foundation_checks(self.foundation_3, from_pile):
-                self.card_placement(gui, pos, self.foundation_3, settings.col5_x, from_pile)
-        elif pos[1] >= settings.row1_y:
-            self.card_placement(gui, pos, self.col5, settings.col5_x, from_pile)
 
-        if pos[1] < settings.row1_y:
-            if self.foundation_checks(self.foundation_4, from_pile):
-                self.ard_placement(gui, pos, self.foundation_4, settings.col6_x, from_pile)
-        elif pos[1] >= settings.row1_y:
-            self.card_placement(gui, pos, self.col6, settings.col6_x, from_pile)
 
 
     def col_checks(self, col:list, from_pile:list) -> bool:
@@ -130,12 +134,13 @@ class Controller():
         # also need to add more checks, right now only testing for 
         # 0 col length for King placement 
 
-        can_place = False
+        # can_place = False
         
-        if len(col) == 0 and from_pile[-1].number == 13:
-            can_place = True
+        # if len(col) == 0 and from_pile[-1].number == 13:
+        #     can_place = True
         
-        return can_place
+        # return can_place
+        pass
 
 
     def foundation_checks(self, foundation:list, from_pile: list) -> bool: 

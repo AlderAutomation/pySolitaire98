@@ -5,7 +5,7 @@ import deck
 import my_logger
 
 my_log = my_logger.Default().my_logger
-
+ 
 
 class SolitaireGUI():
     def __init__(self) -> None:       
@@ -89,10 +89,6 @@ class SolitaireGUI():
         self.deal_for_new_game(col6)
 
 
-
-
-
-
     def deal_for_new_game(self, col:object) -> None:
         for card in col: 
             if card.face == "down":
@@ -110,12 +106,14 @@ class SolitaireGUI():
         
             temp_y = temp_y + settings.row0_y
 
+
     def move_card(self, mouse_pos:tuple, card:object)->None: 
         # Card Dragging and drawing function
         card.top_x = mouse_pos[0]
         card.top_y = mouse_pos [1]
 
         self.surface.blit(card.frontside, (card.top_x, card.top_y))
+
 
     def col_flip_check(self, col: list):
         if len(col) == 0:
@@ -129,7 +127,6 @@ class SolitaireGUI():
         
         game.new_game_deal(self)
 
-
         while running: 
 
             for event in pygame.event.get():
@@ -141,8 +138,6 @@ class SolitaireGUI():
 
                     if len(game.talon) > 0: 
                         game.talon[-1].set_is_clicked(pos, True)
-
-                    print(game.cols)
                     
                     for col in game.cols:
                         if len(col) > 0:
@@ -166,7 +161,6 @@ class SolitaireGUI():
                                     game.switch_is_covered(col[-3], col[-2])
                                 game.placement_checks(self, pos, col)
                             card.set_is_clicked(pos, False)
-                        self.redraw_all(game)
 
                     for card in game.talon:
                         if card.is_clicked:                       
@@ -187,7 +181,6 @@ class SolitaireGUI():
                 if event.type == pygame.MOUSEMOTION and len(game.talon) > 0:
                     if game.talon[-1].is_clicked:
                         pos = pygame.mouse.get_pos()
-                        self.redraw_all(game)
                         if len(game.talon) > 1:
                             self.surface.blit(game.talon[-2].frontside, (game.talon[-2].top_x, game.talon[-2].top_y))
                         self.move_card(pos, game.talon[-1])
@@ -196,9 +189,9 @@ class SolitaireGUI():
                     if event.type == pygame.MOUSEMOTION and len(col) > 0:
                         if col[-1].is_clicked:
                             pos = pygame.mouse.get_pos()
-                            self.redraw_all(game)
                             self.move_card(pos, col[-1])
 
+                self.redraw_all(game)
 
             self.clock.tick(self.FPS)
 
