@@ -35,13 +35,15 @@ class SolitaireGUI():
         self.FPS = 60
 
 
-    def redraw_all(self, game):
+    def redraw_all(self, game:object, is_moving:bool=False ):
         self.surface.fill(self.color)
         self.draw_foundations(game.foundations)
         self.draw_stock_pile(game.stock)
         self.draw_colums(game.col0, game.col1, game.col2, game.col3, game.col4, game.col5, game.col6)
-        if len(game.talon) > 1:
+        if len(game.talon) > 1 and not is_moving:
             self.draw_talon(-1, game.talon)
+        elif len(game.talon) > 2 and is_moving:
+            self.draw_talon(-2, game.talon)
 
 
     def draw_talon(self, amount: int, talon:list) -> None:
@@ -49,9 +51,10 @@ class SolitaireGUI():
 
 
     def draw_stock_pile(self, stock:list) -> None:
-        self.surface.blit(stock.card_deck[-1].backside, (20, 20))
-        self.surface.blit(stock.card_deck[-1].backside, (30, 20))
-        self.surface.blit(stock.card_deck[-1].backside, (40, 20))
+        if len(stock.card_deck) > 1:
+            self.surface.blit(stock.card_deck[-1].backside, (20, 20))
+            self.surface.blit(stock.card_deck[-1].backside, (30, 20))
+            self.surface.blit(stock.card_deck[-1].backside, (40, 20))
 
 
     def draw_foundations(self, foundations:list) -> None:
@@ -100,11 +103,12 @@ class SolitaireGUI():
             temp_y = temp_y + settings.row0_y
 
 
-    def move_card(self, mouse_pos:tuple, card:object)->None: 
+    def move_card(self, mouse_pos:tuple, card:object, game:object)->None: 
         # Card Dragging and drawing function
         card.top_x = mouse_pos[0]
         card.top_y = mouse_pos [1]
 
+        self.redraw_all(game, True)
         self.surface.blit(card.frontside, (card.top_x, card.top_y))
 
 
@@ -134,7 +138,6 @@ class SolitaireGUI():
                     
                     for col in game.cols:
                         if len(col) > 0:
-                            
                             col[-1].set_is_clicked(pos, True)
 
 
@@ -162,26 +165,22 @@ class SolitaireGUI():
                             game.placement_checks(self, pos, game.talon)
                         card.set_is_clicked(pos, False)
                         
-                    try:
-                        if pos[0] >= settings.col0_x and pos[0] <= settings.col0_x + settings.card_width:
-                            if pos[1] >= settings.row0_y and pos[1] <= settings.row0_y + settings.card_height:
-                                game.deal_cards(self)
-                    except:
-                        game.deal_cards(self)
+                    if pos[0] >= settings.col0_x and pos[0] <= settings.col0_x + settings.card_width:
+                        if pos[1] >= settings.row0_y and pos[1] <= settings.row0_y + settings.card_height:
+                            game.deal_cards_to_talon(self)
 
                 if event.type == pygame.MOUSEMOTION and len(game.talon) > 0:
                     if game.talon[-1].is_clicked:
                         pos = pygame.mouse.get_pos()
                         if len(game.talon) > 1:
                             self.surface.blit(game.talon[-2].frontside, (game.talon[-2].top_x, game.talon[-2].top_y))
-                        self.move_card(pos, game.talon[-1])
+                        self.move_card(pos, game.talon[-1], game)
 
                 for col in game.cols:
                     if event.type == pygame.MOUSEMOTION and len(col) > 0:
                         if col[-1].is_clicked:
                             pos = pygame.mouse.get_pos()
-                            self.move_card(pos, col[-1])
-
+                            self.move_card(pos, col[-1], game)
 
             self.clock.tick(self.FPS)
 
