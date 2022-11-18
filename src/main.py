@@ -45,13 +45,11 @@ class Controller():
             print(f"Remaining cards: {len(self.stock.card_deck)}")
             if len(self.stock.card_deck) == 0 and self.stock.is_out_of_cards == False:
                 self.stock.is_out_of_cards = True
-                
                 gui.surface.fill(gui.color)
                 gui.surface.blit(self.talon[-1].frontside, (self.talon[-1].top_x, self.talon[-1].top_y))
                 gui.draw_colums(self.col0, self.col1, self.col2, self.col3, self.col4, self.col5, self.col6)
                 gui.draw_foundations(self.foundations)
                 gui.surface.blit(gui.out_of_cards, (20, 20))
-                print ("draw out of cards")
         elif len(self.stock.card_deck) == 0 and self.stock.is_out_of_cards == True:
             self.rebuild_stock_pile()
             gui.redraw_all(self)

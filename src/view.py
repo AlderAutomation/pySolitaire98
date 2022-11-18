@@ -140,12 +140,7 @@ class SolitaireGUI():
 
                 if event.type == pygame.MOUSEBUTTONUP:
                     pos = pygame.mouse.get_pos()
-
-
                     for col in game.cols:
-                        if self.col_flip_check(col):
-                            col[-1].flip_card()
-                            my_log.debug(f"{col[-1].number} of {col[-1].suit} has been flipped")
                         for card in col:
                             if card.is_clicked: 
                                 if len(col) == 2:
@@ -153,6 +148,9 @@ class SolitaireGUI():
                                 elif len(col) > 2:
                                     game.switch_is_covered(col[-3], col[-2])
                                 game.placement_checks(self, pos, col)
+                            elif card.is_clicked == False:
+                                if self.col_flip_check(col):
+                                    col[-1].flip_card()
                             card.set_is_clicked(pos, False)
 
                     for card in game.talon:
