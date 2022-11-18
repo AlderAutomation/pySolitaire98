@@ -31,7 +31,7 @@ class Controller():
         self.cols = [self.col0, self.col1, self.col2, self.col3, self.col4, self.col5, self.col6]
 
 
-    def deal_cards(self, gui) -> None:
+    def deal_cards_to_talon(self, gui) -> None:
         if len(self.stock.card_deck) > 0:
             self.talon.append(self.stock.deal())
             self.talon[-1].top_x = 166
@@ -41,7 +41,6 @@ class Controller():
             if len(self.talon) > 1:
                 self.talon[-2].is_covered = True
             gui.surface.blit(self.talon[-1].frontside, (self.talon[-1].top_x, self.talon[-1].top_y))
-            my_log.debug(f"Remaining cards: {len(self.stock.card_deck)}")
             print(f"Remaining cards: {len(self.stock.card_deck)}")
             if len(self.stock.card_deck) == 0 and self.stock.is_out_of_cards == False:
                 self.stock.is_out_of_cards = True
@@ -88,8 +87,10 @@ class Controller():
         if pos[0] >= x and pos[0] <= x + settings.card_width:
             to_pile.append(from_pile.pop())
             gui.redraw_all(self)
-            if len(from_pile) > 1:
+            if len(from_pile) > 1 and from_pile[-1].face == "down":
                 gui.surface.blit(from_pile[-1].backside, (from_pile[-1].top_x, from_pile[-1].top_y))
+            elif len(from_pile) > 1 and from_pile[-1].face == "up":
+                gui.surface.blit(from_pile[-1].frontside, (from_pile[-1].top_x, from_pile[-1].top_y))
             if len(to_pile) > 1:
                 self.switch_is_covered(to_pile[-2], to_pile[-1])
 
@@ -104,11 +105,11 @@ class Controller():
                 if self.foundation_checks(self.foundation_2, from_pile):
                     self.card_placement(gui, pos, self.foundation_2, settings.col4_x, from_pile)
             if pos[0] >= settings.col5_x and pos[0] <= settings.col5_x + settings.card_width:
-                if self.foundation_checks(self.foundation_1, from_pile):
-                    self.card_placement(gui, pos, self.foundation_1, settings.col5_x, from_pile)
+                if self.foundation_checks(self.foundation_3, from_pile):
+                    self.card_placement(gui, pos, self.foundation_3, settings.col5_x, from_pile)
             if pos[0] >= settings.col6_x and pos[0] <= settings.col6_x + settings.card_width:
-                if self.foundation_checks(self.foundation_2, from_pile):
-                    self.card_placement(gui, pos, self.foundation_2, settings.col6_x, from_pile)
+                if self.foundation_checks(self.foundation_4, from_pile):
+                    self.card_placement(gui, pos, self.foundation_4, settings.col6_x, from_pile)
 
         elif pos[1] >= settings.row1_y:
             if pos[0] >= settings.col0_x and pos[0] <= settings.col0_x + settings.card_width:
